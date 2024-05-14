@@ -2,4 +2,4 @@
 
 ## Overview
 
-The CSI3X40 Labs repositorys contains all lab assignments 
+The CSI3X40 Labs repository contains all lab assignments.
