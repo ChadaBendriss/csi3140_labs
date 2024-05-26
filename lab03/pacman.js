@@ -25,5 +25,43 @@ function createGame(n) {
     return game;
 }
 
+function moveLeft(game) {
+    // Find the index of Pacman
+    const pacmanIndex = game.indexOf('C');
+    
+    // If Pacman is already at the leftmost position, do nothing
+    if (pacmanIndex > 0) {
+        // Swap Pacman with the left position
+        game[pacmanIndex] = '.';
+        game[pacmanIndex - 1] = 'C';
+    }
+    
+    return game;
+}
+
+function moveRight(game) {
+    // Find the index of Pacman
+    const pacmanIndex = game.indexOf('C');
+    
+    // If Pacman is already at the rightmost position, do nothing
+    if (pacmanIndex < game.length - 1) {
+        // Swap Pacman with the right position
+        game[pacmanIndex] = '.';
+        game[pacmanIndex + 1] = 'C';
+    }
+    
+    return game;
+}
+
 // Example usage
-console.log(createGame(10));
+let game = createGame(10);
+console.log(game); // Initial state
+
+game = moveLeft(game);
+console.log(game); // After moving left
+
+game = moveRight(game);
+console.log(game); // After moving right
+
+game = moveRight(game);
+console.log(game); // After moving right again
