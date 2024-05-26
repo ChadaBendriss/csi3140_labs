@@ -63,6 +63,18 @@ function moveRight(gameState) {
     return { game, pacmanIndex, score };
 }
 
+function checkLevelCompletion(gameState) {
+    // Check if there are no more pellets (".") left in the game
+    return !gameState.game.includes('.');
+}
+
+function resetGame(n, score) {
+    // Create a new game with the same score
+    let newGameState = createGame(n);
+    newGameState.score = score; // Preserve the score
+    return newGameState;
+}
+
 // Example usage
 let gameState = createGame(10);
 console.log(gameState); // Initial state
@@ -73,5 +85,17 @@ console.log(gameState); // After moving right
 gameState = moveRight(gameState);
 console.log(gameState); // After moving right again
 
+if (checkLevelCompletion(gameState)) {
+    gameState = resetGame(10, gameState.score);
+    console.log("Level completed! Moving to the next level.");
+}
+
 gameState = moveLeft(gameState);
 console.log(gameState); // After moving left
+
+if (checkLevelCompletion(gameState)) {
+    gameState = resetGame(10, gameState.score);
+    console.log("Level completed! Moving to the next level.");
+}
+
+console.log(gameState);
