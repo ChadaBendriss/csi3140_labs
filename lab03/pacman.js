@@ -10,8 +10,8 @@ function createGame(n) {
         return index;
     }
 
-    // Place Pacman ("C") in the middle
-    const pacmanIndex = Math.floor(n / 2);
+    // Place Pacman ("C") in a random empty position
+    const pacmanIndex = getRandomEmptyIndex();
     game[pacmanIndex] = 'C';
 
     // Place Ghost ("^") in a random empty position
@@ -27,4 +27,3 @@ function createGame(n) {
 
 // Example usage
 console.log(createGame(10));
-
