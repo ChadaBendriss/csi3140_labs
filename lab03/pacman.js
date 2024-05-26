@@ -22,7 +22,7 @@ function createGame(n) {
     const fruitIndex = getRandomEmptyIndex();
     game[fruitIndex] = '@';
 
-    return { game, pacmanIndex, score: 0 };
+    return { game, pacmanIndex, ghostIndex, score: 0 };
 }
 
 function moveLeft(gameState) {
@@ -41,7 +41,7 @@ function moveLeft(gameState) {
         game[pacmanIndex] = 'C';
     }
 
-    return { game, pacmanIndex, score };
+    return { game, pacmanIndex, ghostIndex: gameState.ghostIndex, score };
 }
 
 function moveRight(gameState) {
@@ -60,42 +60,54 @@ function moveRight(gameState) {
         game[pacmanIndex] = 'C';
     }
 
-    return { game, pacmanIndex, score };
+    return { game, pacmanIndex, ghostIndex: gameState.ghostIndex, score };
 }
 
-function checkLevelCompletion(gameState) {
-    // Check if there are no more pellets (".") left in the game
-    return !gameState.game.includes('.');
+function moveGhost(gameState) {
+    let { game, ghostIndex } = gameState;
+
+    // Decide random direction: 0 for left, 1 for right
+    const direction = Math.floor(Math.random() * 2);
+
+    if (direction === 0 && ghostIndex > 0) {
+        // Move Ghost to the left
+        game[ghostIndex] = '.';
+        ghostIndex -= 1;
+        game[ghostIndex] = '^';
+    } else if (direction === 1 && ghostIndex < game.length - 1) {
+        // Move Ghost to the right
+        game[ghostIndex] = '.';
+        ghostIndex += 1;
+        game[ghostIndex] = '^';
+    }
+
+    return { ...gameState, game, ghostIndex };
 }
 
-function resetGame(n, score) {
-    // Create a new game with the same score
-    let newGameState = createGame(n);
-    newGameState.score = score; // Preserve the score
-    return newGameState;
+function startGhostMovement(gameState) {
+    // Move the ghost every 2 seconds
+    return setInterval(() => {
+        gameState = moveGhost(gameState);
+        console.log(gameState);
+    }, 2000);
 }
 
 // Example usage
 let gameState = createGame(10);
 console.log(gameState); // Initial state
 
+// Start moving the ghost every 2 seconds
+const intervalId = startGhostMovement(gameState);
+
+// Example: Manually moving Pacman
 gameState = moveRight(gameState);
 console.log(gameState); // After moving right
 
 gameState = moveRight(gameState);
 console.log(gameState); // After moving right again
 
-if (checkLevelCompletion(gameState)) {
-    gameState = resetGame(10, gameState.score);
-    console.log("Level completed! Moving to the next level.");
-}
-
 gameState = moveLeft(gameState);
 console.log(gameState); // After moving left
 
-if (checkLevelCompletion(gameState)) {
-    gameState = resetGame(10, gameState.score);
-    console.log("Level completed! Moving to the next level.");
-}
-
-console.log(gameState);
+// To stop the ghost movement, you can clear the interval
+clearInterval(intervalId);
