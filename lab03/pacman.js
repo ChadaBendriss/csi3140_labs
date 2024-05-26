@@ -22,46 +22,56 @@ function createGame(n) {
     const fruitIndex = getRandomEmptyIndex();
     game[fruitIndex] = '@';
 
-    return game;
+    return { game, pacmanIndex, score: 0 };
 }
 
-function moveLeft(game) {
-    // Find the index of Pacman
-    const pacmanIndex = game.indexOf('C');
+function moveLeft(gameState) {
+    let { game, pacmanIndex, score } = gameState;
     
     // If Pacman is already at the leftmost position, do nothing
     if (pacmanIndex > 0) {
-        // Swap Pacman with the left position
+        // Check if the left position is a pellet
+        if (game[pacmanIndex - 1] === '.') {
+            score += 1; // Increase score for eating a pellet
+        }
+
+        // Move Pacman to the left
         game[pacmanIndex] = '.';
-        game[pacmanIndex - 1] = 'C';
+        pacmanIndex -= 1;
+        game[pacmanIndex] = 'C';
     }
-    
-    return game;
+
+    return { game, pacmanIndex, score };
 }
 
-function moveRight(game) {
-    // Find the index of Pacman
-    const pacmanIndex = game.indexOf('C');
+function moveRight(gameState) {
+    let { game, pacmanIndex, score } = gameState;
     
     // If Pacman is already at the rightmost position, do nothing
     if (pacmanIndex < game.length - 1) {
-        // Swap Pacman with the right position
+        // Check if the right position is a pellet
+        if (game[pacmanIndex + 1] === '.') {
+            score += 1; // Increase score for eating a pellet
+        }
+
+        // Move Pacman to the right
         game[pacmanIndex] = '.';
-        game[pacmanIndex + 1] = 'C';
+        pacmanIndex += 1;
+        game[pacmanIndex] = 'C';
     }
-    
-    return game;
+
+    return { game, pacmanIndex, score };
 }
 
 // Example usage
-let game = createGame(10);
-console.log(game); // Initial state
+let gameState = createGame(10);
+console.log(gameState); // Initial state
 
-game = moveLeft(game);
-console.log(game); // After moving left
+gameState = moveRight(gameState);
+console.log(gameState); // After moving right
 
-game = moveRight(game);
-console.log(game); // After moving right
+gameState = moveRight(gameState);
+console.log(gameState); // After moving right again
 
-game = moveRight(game);
-console.log(game); // After moving right again
+gameState = moveLeft(gameState);
+console.log(gameState); // After moving left
